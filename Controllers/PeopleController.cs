@@ -45,7 +45,7 @@ namespace PhoneBookBackEnd.Controllers
       }
       else
       {
-        return new { message = "Person not found" };
+        return new { message = "Person or people not found" };
       }
 
     }
