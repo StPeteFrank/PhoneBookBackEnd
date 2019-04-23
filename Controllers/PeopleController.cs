@@ -20,7 +20,7 @@ namespace PhoneBookBackEnd.Controllers
       // query my database
       var db = new PhoneBookDbContext();
       //SELECT * FROM People
-      var results = db.People.OrderBy(people => people.Name);
+      var results = db.People.OrderBy(people => people.FirstName);
       //return the results
       return results.ToList();
     }
