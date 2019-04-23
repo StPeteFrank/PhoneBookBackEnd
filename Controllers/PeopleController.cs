@@ -47,7 +47,27 @@ namespace PhoneBookBackEnd.Controllers
       {
         return new { message = "Person or people not found" };
       }
-
     }
+
+    [HttpPut("{id}")]
+    public ActionResult<object> UpdatePeople([FromRoute]int id, [FromBody] People newInformation)
+    {
+      var db = new PhoneBookDbContext();
+      var peopleToUpdate = db.People.FirstOrDefault(people => people.Id == id);
+      if (peopleToUpdate != null)
+      {
+        peopleToUpdate.FirstName = newInformation.FirstName;
+        peopleToUpdate.LastName = newInformation.LastName;
+        peopleToUpdate.PhoneNumber = newInformation.PhoneNumber;
+        peopleToUpdate.Email = newInformation.Email;
+        db.SaveChanges();
+        return Ok(peopleToUpdate);
+      }
+      else
+      {
+        return NotFound();
+      }
+    }
+
   }
 }
