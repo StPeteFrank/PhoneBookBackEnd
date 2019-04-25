@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PhoneBookBackEnd.Models;
+using PhoneBookBackEnd.ViewModels;
 
 namespace PhoneBookBackEnd.Controllers
 {
@@ -66,6 +67,23 @@ namespace PhoneBookBackEnd.Controllers
       else
       {
         return NotFound();
+      }
+    }
+
+    [HttpDelete("list")]
+    public ActionResult DeleteGroupOfContacts([FromBody]DeleteContactsViewModel vm)
+    {
+      var db = new PhoneBookDbContext();
+      var contactIDsSelectedForDelete = db.People.Where(people => vm.PeopleIds.Contains(people.Id));
+      if (contactIDsSelectedForDelete != null)
+      {
+        db.People.RemoveRange(contactIDsSelectedForDelete);
+        db.SaveChanges();
+        return Ok();
+      }
+      else
+      {
+        return Ok(vm);
       }
     }
 
