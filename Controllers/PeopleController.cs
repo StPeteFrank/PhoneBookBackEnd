@@ -49,6 +49,25 @@ namespace PhoneBookBackEnd.Controllers
         return new { message = "Person or people not found" };
       }
     }
+    // Delete people by List select checkbox.
+    [HttpDelete("list")]
+    public ActionResult DeleteGroupOfEmployees([FromBody]DeletePeopleViewModel vm)
+    {
+      var db = new PhoneBookDbContext();
+      var peopleIDsSelectedForDelete = db.People.Where(people => vm.PeopleIds.Contains(people.Id));
+      if (peopleIDsSelectedForDelete != null)
+      {
+        db.People.RemoveRange(peopleIDsSelectedForDelete);
+        db.SaveChanges();
+        return Ok();
+      }
+      else
+      {
+        return Ok(vm);
+      }
+    }
+
+    //
 
     [HttpPut("{id}")]
     public ActionResult<object> UpdatePeople([FromRoute]int id, [FromBody] People newInformation)
@@ -67,23 +86,6 @@ namespace PhoneBookBackEnd.Controllers
       else
       {
         return NotFound();
-      }
-    }
-
-    [HttpDelete("list")]
-    public ActionResult DeleteGroupOfContacts([FromBody]DeleteContactsViewModel vm)
-    {
-      var db = new PhoneBookDbContext();
-      var contactIDsSelectedForDelete = db.People.Where(people => vm.PeopleIds.Contains(people.Id));
-      if (contactIDsSelectedForDelete != null)
-      {
-        db.People.RemoveRange(contactIDsSelectedForDelete);
-        db.SaveChanges();
-        return Ok();
-      }
-      else
-      {
-        return Ok(vm);
       }
     }
 
